@@ -96,6 +96,7 @@ dependencies {
     implementation("androidx.activity:activity-ktx:1.9.3")
     implementation("com.github.Dimezis:BlurView:version-2.0.5")
     implementation("com.github.bumptech.glide:glide:4.16.0")
+    implementation("com.google.android.gms:play-services-location:21.0.1")
 
     //implementation("com.github.User:Repo:Tag")
 }

@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.example.firstapp.R
 import com.example.firstapp.databinding.CityViewholderBinding
 import com.example.firstapp.model.CityResponseApi
 import com.example.firstapp.shared.PrefManager
@@ -32,24 +31,19 @@ class CityAdapter : RecyclerView.Adapter<CityAdapter.ViewHolder>() {
         holder.binding.cityTxt.text = fullLocationName
         holder.binding.countryTxt.text = "Tọa độ: ${city.lat}, ${city.lon}"
         
-        // Hiển thị trạng thái ngôi sao
-        updateFavoriteIcon(holder, prefManager.isFavorite(city.name))
+        // Cập nhật trạng thái ngôi sao chính xác theo tọa độ
+        updateFavoriteIcon(holder, prefManager.isFavorite(city))
 
-        // Xử lý khi nhấn vào ngôi sao (Thêm/Xóa yêu thích)
         holder.binding.favBtn.setOnClickListener {
             prefManager.toggleFavorite(city)
-            updateFavoriteIcon(holder, prefManager.isFavorite(city.name))
+            updateFavoriteIcon(holder, prefManager.isFavorite(city))
         }
 
-        // Xử lý khi nhấn vào cả dòng (Chỉ để xem, không tự động thêm vào yêu thích)
         holder.binding.root.setOnClickListener {
             SharedData.sharedLatitude = city.lat ?: 0.0
             SharedData.sharedLongitude = city.lon ?: 0.0
             SharedData.sharedCity = fullLocationName
-            
-            // Đánh dấu là đang xem một thành phố tạm thời (không phải trong list favorites mặc định)
             SharedData.isTemporarySearch = true
-            
             (holder.binding.root.context as? Activity)?.finish()
         }
     }

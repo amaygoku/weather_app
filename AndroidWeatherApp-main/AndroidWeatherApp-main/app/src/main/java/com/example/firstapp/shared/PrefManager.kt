@@ -20,7 +20,6 @@ class PrefManager(context: Context) {
         addCityToHistory(cityName, lat, lon)
     }
 
-    // Quản lý danh sách Yêu thích
     fun getFavorites(): MutableList<CityResponseApi.CityResponseItem> {
         val json = pref.getString("favorites", null) ?: return mutableListOf()
         val type = object : TypeToken<MutableList<CityResponseApi.CityResponseItem>>() {}.type
@@ -29,20 +28,20 @@ class PrefManager(context: Context) {
 
     fun toggleFavorite(city: CityResponseApi.CityResponseItem) {
         val favorites = getFavorites()
-        val exists = favorites.find { it.name == city.name && it.lat == city.lat }
+        val exists = favorites.find { it.name == city.name && it.lat == city.lat && it.lon == city.lon }
         if (exists != null) {
-            favorites.remove(exists)
+            favorites.removeAll { it.name == city.name && it.lat == city.lat && it.lon == city.lon }
         } else {
             favorites.add(city)
         }
         pref.edit().putString("favorites", gson.toJson(favorites)).apply()
     }
 
-    fun isFavorite(cityName: String?): Boolean {
-        return getFavorites().any { it.name == cityName }
+    // Sửa hàm này để kiểm tra chính xác theo tọa độ
+    fun isFavorite(city: CityResponseApi.CityResponseItem): Boolean {
+        return getFavorites().any { it.name == city.name && it.lat == city.lat && it.lon == city.lon }
     }
 
-    // Lịch sử tìm kiếm
     private fun addCityToHistory(name: String, lat: Double, lon: Double) {
         val history = getHistory().toMutableList()
         history.removeAll { it.name == name }

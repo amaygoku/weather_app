@@ -14,27 +14,28 @@
 
     <ImageView
         android:id="@+id/addCityButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="56dp"
         android:layout_marginEnd="90dp"
         android:elevation="10dp"
+        android:padding="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/plus" />
 
     <ImageView
         android:id="@+id/settingButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="56dp"
         android:layout_marginEnd="32dp"
         android:elevation="10dp"
+        android:padding="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_setting" />
 
-    <!-- Xóa DotsIndicator để tránh lỗi build do không tìm thấy thư viện -->
     <LinearLayout
         android:id="@+id/dots_container"
         android:layout_width="wrap_content"

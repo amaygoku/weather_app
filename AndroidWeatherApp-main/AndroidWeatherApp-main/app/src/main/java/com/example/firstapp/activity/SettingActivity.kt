@@ -1,51 +1,53 @@
 package com.example.firstapp.activity
 
-import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageView
-import android.widget.Switch
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SwitchCompat
 import com.example.firstapp.R
+import com.example.firstapp.shared.PrefManager
 import com.example.firstapp.shared.SharedData
 
 class SettingActivity : AppCompatActivity() {
+    private val prefManager by lazy { PrefManager(this) }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_setting)
 
-        // Initialize views
-        val tempUnitSwitch: Switch = findViewById(R.id.temp_unit_switch)
+        val tempUnitSwitch: SwitchCompat = findViewById(R.id.temp_unit_switch)
         val backButton: ImageView = findViewById(R.id.back_button)
         val aboutButton: Button = findViewById(R.id.about_button)
         val exitButton: Button = findViewById(R.id.exit_button)
 
-        // Handle Temperature Unit Switch
-        tempUnitSwitch.isChecked = SharedData.unitString == "imperial"
+        // Thiết lập trạng thái ban đầu của Switch dựa trên dữ liệu đã lưu
+        tempUnitSwitch.isChecked = SharedData.sharedUnit == "imperial"
+        
         tempUnitSwitch.setOnCheckedChangeListener { _, isChecked ->
-            val unit = if (isChecked) "Fahrenheit" else "Celsius"
-            if(unit == "Fahrenheit"){
-                SharedData.unitString = "imperial"
-            } else {
-                SharedData.unitString = "metric"
-            }
-            Toast.makeText(this, "Temperature unit set to $unit", Toast.LENGTH_SHORT).show()
-        }
-        backButton.setOnClickListener{
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
-        }
-        // Handle About Button
-        aboutButton.setOnClickListener {
-            // Placeholder for "About" feature
-            Toast.makeText(this, "About clicked. Feature not implemented yet.", Toast.LENGTH_SHORT).show()
+            val unit = if (isChecked) "imperial" else "metric"
+            val unitName = if (isChecked) "Fahrenheit" else "Celsius"
+            
+            // 1. Cập nhật SharedData để dùng ngay
+            SharedData.sharedUnit = unit
+            
+            // 2. Lưu vào SharedPreferences để dùng cho lần sau
+            prefManager.saveUnit(unit)
+            
+            Toast.makeText(this, "Đã đổi đơn vị sang $unitName", Toast.LENGTH_SHORT).show()
         }
 
-        // Handle Exit Button
+        backButton.setOnClickListener {
+            finish()
+        }
+
+        aboutButton.setOnClickListener {
+            Toast.makeText(this, "Weather App v1.0", Toast.LENGTH_SHORT).show()
+        }
+
         exitButton.setOnClickListener {
-            // Exit the app
-            finishAffinity() // Closes all activities in the task
+            finishAffinity() 
         }
     }
 }

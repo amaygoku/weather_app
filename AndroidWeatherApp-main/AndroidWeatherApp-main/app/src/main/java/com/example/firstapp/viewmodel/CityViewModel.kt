@@ -8,6 +8,8 @@ import com.example.firstapp.model.CityResponseApi
 import com.example.firstapp.repository.CityRepository
 import com.example.firstapp.server.ApiClient
 import com.example.firstapp.server.ApiServices
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class CityViewModel(private val repository: CityRepository) : ViewModel() {
@@ -21,11 +23,15 @@ class CityViewModel(private val repository: CityRepository) : ViewModel() {
     private val _error = MutableLiveData<String>()
     val error: LiveData<String> = _error
 
-    private val apiKey = "bde3155f96b4e71b2d4f5546b52701d8" // Move to a secure place
+    // Cập nhật API Key mới
+    private val apiKey = "dbf63f777a1a59d0c0cf2f858e2b5e4c"
+    private var searchJob: Job? = null
 
     fun loadCities(q: String, limit: Int) {
-        viewModelScope.launch {
+        searchJob?.cancel()
+        searchJob = viewModelScope.launch {
             try {
+                delay(500)
                 val response = repository.getCities(q, limit, apiKey)
                 if (response.isSuccessful && response.body() != null) {
                     _cities.postValue(response.body())
@@ -33,7 +39,9 @@ class CityViewModel(private val repository: CityRepository) : ViewModel() {
                     _error.postValue("Error: ${response.message()}")
                 }
             } catch (e: Exception) {
-                _error.postValue("Exception: ${e.message}")
+                if (e !is kotlinx.coroutines.CancellationException) {
+                    _error.postValue("Exception: ${e.message}")
+                }
             }
         }
     }

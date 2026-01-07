@@ -90,15 +90,16 @@ dependencies {
     // Gson
     implementation("com.google.code.gson:gson:2.9.1")
 
-    //implementation("com.github.MatteoBattilana:WeatherView:3.0.0")
-
     // View model
     implementation("androidx.activity:activity-ktx:1.9.3")
+    implementation("androidx.fragment:fragment-ktx:1.8.2") // Thêm dependency này để dùng viewModels() trong Fragment
+    
     implementation("com.github.Dimezis:BlurView:version-2.0.5")
     implementation("com.github.bumptech.glide:glide:4.16.0")
     implementation("com.google.android.gms:play-services-location:21.0.1")
 
-    //implementation("com.github.User:Repo:Tag")
+    // MPAndroidChart cho biểu đồ nhiệt độ
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
 }
 kapt{
     correctErrorTypes = true

@@ -1,6 +1,5 @@
 package com.example.firstapp.repository
 
-import com.example.firstapp.server.ApiClient
 import com.example.firstapp.server.ApiServices
 
 class WeatherRepository(private val api: ApiServices) {
@@ -12,4 +11,7 @@ class WeatherRepository(private val api: ApiServices) {
 
     suspend fun getCityList(q: String, limit: Int, apiKey: String) =
         api.getCityList(q, limit, apiKey)
+
+    suspend fun getAirPollution(lat: Double, lon: Double, apiKey: String) =
+        api.getAirPollution(lat, lon, apiKey)
 }

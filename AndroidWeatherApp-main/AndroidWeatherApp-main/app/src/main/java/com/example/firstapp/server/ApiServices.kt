@@ -1,5 +1,6 @@
 package com.example.firstapp.server
 
+import com.example.firstapp.model.AirPollutionResponseApi
 import com.example.firstapp.model.CityResponseApi
 import com.example.firstapp.model.CurrentResponseApi
 import com.example.firstapp.model.ForecastResponseApi
@@ -31,4 +32,11 @@ interface ApiServices {
         @Query("limit") limit:Int,
         @Query("appid") ApiKey:String
     ): Response<CityResponseApi>
+
+    @GET("data/2.5/air_pollution")
+    suspend fun getAirPollution(
+        @Query("lat") lat:Double,
+        @Query("lon") lon:Double,
+        @Query("appid") ApiKey:String
+    ): Response<AirPollutionResponseApi>
 }

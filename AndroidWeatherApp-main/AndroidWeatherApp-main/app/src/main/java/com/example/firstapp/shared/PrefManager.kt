@@ -66,4 +66,12 @@ class PrefManager(context: Context) {
     fun saveUnit(unit: String) {
         pref.edit().putString("unit", unit).apply()
     }
+    
+    fun saveLanguage(languageCode: String) {
+        pref.edit().putString("language", languageCode).apply()
+    }
+    
+    fun getLanguage(): String {
+        return pref.getString("language", "en") ?: "en"
+    }
 }

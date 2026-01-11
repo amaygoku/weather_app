@@ -1,3 +1,64 @@
 <resources>
-    <string name="app_name">FirstApp</string>
+    <string name="app_name">Weather App</string>
+    
+    <!-- Main Activity -->
+    <string name="getting_location">Getting location…</string>
+    <string name="location_permission_required">Location permission required to use GPS</string>
+    <string name="got_location">Got location: %1$s</string>
+    <string name="geocoder_error">Error getting city name: %1$s</string>
+    <string name="location_failed">Cannot get location. Please turn on GPS</string>
+    <string name="gps_error">GPS error: %1$s</string>
+    
+    <!-- Settings -->
+    <string name="settings">Settings</string>
+    <string name="temperature_unit">Temperature Unit</string>
+    <string name="fahrenheit">Fahrenheit</string>
+    <string name="celsius">Celsius</string>
+    <string name="changed_unit">Changed unit to %1$s</string>
+    <string name="about">About</string>
+    <string name="about_message">Weather App v1.0</string>
+    <string name="exit">Exit</string>
+    <string name="language">Language</string>
+    <string name="vietnamese">Vietnamese</string>
+    <string name="english">English</string>
+    <string name="language_changed">Language changed. Please restart the app</string>
+    
+    <!-- Weather Fragment -->
+    <string name="current_location">Current Location</string>
+    <string name="aqi_good">AQI: Good</string>
+    <string name="aqi_fair">AQI: Fair</string>
+    <string name="aqi_moderate">AQI: Moderate</string>
+    <string name="aqi_poor">AQI: Poor</string>
+    <string name="aqi_very_poor">AQI: Very Poor</string>
+    <string name="aqi_unknown">AQI: -</string>
+    
+    <!-- Add City -->
+    <string name="search_city">Search City</string>
+    <string name="no_results">No results found</string>
+    <string name="network_error">Network error. Please check your connection</string>
+    
+    <!-- Common -->
+    <string name="loading">Loading…</string>
+    <string name="error">Error</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="back">Back</string>
+    
+    <!-- Days of Week -->
+    <string name="sunday">Sun</string>
+    <string name="monday">Mon</string>
+    <string name="tuesday">Tue</string>
+    <string name="wednesday">Wed</string>
+    <string name="thursday">Thu</string>
+    <string name="friday">Fri</string>
+    <string name="saturday">Sat</string>
+    
+    <!-- Temperature Labels -->
+    <string name="highest_temp">Highest temperature</string>
+    <string name="lowest_temp">Lowest temperature</string>
+    <string name="highest_temp_short">H</string>
+    <string name="lowest_temp_short">L</string>
+    
+    <!-- Wind Speed -->
+    <string name="wind_speed_unit">km/h</string>
 </resources>

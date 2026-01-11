@@ -1,0 +1,64 @@
+<resources>
+    <string name="app_name">Ứng dụng Thời tiết</string>
+    
+    <!-- Main Activity -->
+    <string name="getting_location">Đang lấy vị trí…</string>
+    <string name="location_permission_required">Cần cấp quyền vị trí để sử dụng GPS</string>
+    <string name="got_location">Đã lấy vị trí: %1$s</string>
+    <string name="geocoder_error">Lỗi khi lấy tên thành phố: %1$s</string>
+    <string name="location_failed">Không thể lấy vị trí. Vui lòng bật GPS</string>
+    <string name="gps_error">Lỗi GPS: %1$s</string>
+    
+    <!-- Settings -->
+    <string name="settings">Cài đặt</string>
+    <string name="temperature_unit">Đơn vị nhiệt độ</string>
+    <string name="fahrenheit">Fahrenheit</string>
+    <string name="celsius">Celsius</string>
+    <string name="changed_unit">Đã đổi đơn vị sang %1$s</string>
+    <string name="about">Giới thiệu</string>
+    <string name="about_message">Ứng dụng Thời tiết v1.0</string>
+    <string name="exit">Thoát</string>
+    <string name="language">Ngôn ngữ</string>
+    <string name="vietnamese">Tiếng Việt</string>
+    <string name="english">Tiếng Anh</string>
+    <string name="language_changed">Đã đổi ngôn ngữ. Vui lòng khởi động lại ứng dụng</string>
+    
+    <!-- Weather Fragment -->
+    <string name="current_location">Vị trí hiện tại</string>
+    <string name="aqi_good">AQI: Tốt</string>
+    <string name="aqi_fair">AQI: Khá</string>
+    <string name="aqi_moderate">AQI: Trung bình</string>
+    <string name="aqi_poor">AQI: Kém</string>
+    <string name="aqi_very_poor">AQI: Rất kém</string>
+    <string name="aqi_unknown">AQI: -</string>
+    
+    <!-- Add City -->
+    <string name="search_city">Tìm thành phố</string>
+    <string name="no_results">Không tìm thấy kết quả</string>
+    <string name="network_error">Lỗi mạng. Vui lòng kiểm tra kết nối</string>
+    
+    <!-- Common -->
+    <string name="loading">Đang tải…</string>
+    <string name="error">Lỗi</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Hủy</string>
+    <string name="back">Quay lại</string>
+    
+    <!-- Days of Week -->
+    <string name="sunday">CN</string>
+    <string name="monday">T2</string>
+    <string name="tuesday">T3</string>
+    <string name="wednesday">T4</string>
+    <string name="thursday">T5</string>
+    <string name="friday">T6</string>
+    <string name="saturday">T7</string>
+    
+    <!-- Temperature Labels -->
+    <string name="highest_temp">Nhiệt độ cao nhất</string>
+    <string name="lowest_temp">Nhiệt độ thấp nhất</string>
+    <string name="highest_temp_short">Cao</string>
+    <string name="lowest_temp_short">Thấp</string>
+    
+    <!-- Wind Speed -->
+    <string name="wind_speed_unit">km/h</string>
+</resources>

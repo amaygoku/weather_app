@@ -30,12 +30,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:text="Settings"
+            android:text="@string/settings"
             android:textSize="20sp"
             android:textStyle="bold"
             android:textColor="@color/black" />
     </LinearLayout>
 
+    <!-- Temperature Unit -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -49,7 +50,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Temperature Unit"
+            android:text="@string/temperature_unit"
             android:textColor="@color/black"
             android:textSize="16sp"/>
 
@@ -57,7 +58,40 @@
             android:id="@+id/temp_unit_switch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Fahrenheit"
+            android:text="@string/fahrenheit"
+            tools:ignore="TouchTargetSizeCheck" />
+    </LinearLayout>
+
+    <!-- Language Selector -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingVertical="16dp"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/language"
+            android:textColor="@color/black"
+            android:textSize="16sp"/>
+
+        <TextView
+            android:id="@+id/language_indicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="🇻🇳 Tiếng Việt"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:layout_marginEnd="8dp"/>
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/language_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
             tools:ignore="TouchTargetSizeCheck" />
     </LinearLayout>
 
@@ -66,7 +100,7 @@
         android:id="@+id/about_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="About"
+        android:text="@string/about"
         android:layout_marginTop="16dp"/>
 
     <!-- Exit Button -->
@@ -74,7 +108,7 @@
         android:id="@+id/exit_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Exit"
+        android:text="@string/exit"
         android:layout_marginTop="16dp"
         android:backgroundTint="@android:color/holo_red_dark"
         android:textColor="@color/white"/>

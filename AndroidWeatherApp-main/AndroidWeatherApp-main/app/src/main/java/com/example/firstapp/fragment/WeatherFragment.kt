@@ -119,12 +119,12 @@ class WeatherFragment : Fragment() {
     private fun updateAirUI(data: AirPollutionResponseApi) {
         val aqi = data.list?.get(0)?.main?.aqi ?: 0
         val aqiText = when (aqi) {
-            1 -> "AQI: Tốt"
-            2 -> "AQI: Khá"
-            3 -> "AQI: Trung bình"
-            4 -> "AQI: Kém"
-            5 -> "AQI: Rất kém"
-            else -> "AQI: -"
+            1 -> getString(R.string.aqi_good)
+            2 -> getString(R.string.aqi_fair)
+            3 -> getString(R.string.aqi_moderate)
+            4 -> getString(R.string.aqi_poor)
+            5 -> getString(R.string.aqi_very_poor)
+            else -> getString(R.string.aqi_unknown)
         }
         binding.aqiText.text = aqiText
     }
@@ -187,13 +187,13 @@ class WeatherFragment : Fragment() {
         binding.cityText.text = cityName
         binding.detailLayout.visibility = View.VISIBLE
         binding.statusText.text = data.weather?.get(0)?.main ?: "-"
-        binding.windText.text = (data.wind?.speed?.let { Math.round(it).toString() } ?: "0") + " Km"
+        binding.windText.text = (data.wind?.speed?.let { Math.round(it).toString() } ?: "0") + " " + getString(R.string.wind_speed_unit)
         binding.humidityText.text = (data.main?.humidity?.toString() ?: "-") + "%"
         binding.currentTempText.text = (data.main?.temp?.let { Math.round(it).toString() } ?: "-") + "°"
         
         val maxTemp = data.main?.tempMax?.let { Math.round(it).toString() } ?: "0"
         val minTemp = data.main?.tempMin?.let { Math.round(it).toString() } ?: "0"
-        binding.tempRangeText.text = "H:$maxTemp°  L:$minTemp°"
+        binding.tempRangeText.text = "${getString(R.string.highest_temp_short)}:$maxTemp°  ${getString(R.string.lowest_temp_short)}:$minTemp°"
 
         val drawable = if (isNightNow()) {
             R.drawable.night_bg

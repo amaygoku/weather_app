@@ -32,13 +32,13 @@ class ForecastAdapter : RecyclerView.Adapter<ForecastAdapter.ViewHolder>() {
         val calendar = Calendar.getInstance()
         calendar.time = date
         val dayOfWeekName = when(calendar.get(Calendar.DAY_OF_WEEK)){
-            1 -> "Sun"
-            2 -> "Mon"
-            3 -> "Tue"
-            4 -> "Wed"
-            5 -> "Thu"
-            6 -> "Fri"
-            7 -> "Sat"
+            1 -> binding.root.context.getString(R.string.sunday)
+            2 -> binding.root.context.getString(R.string.monday)
+            3 -> binding.root.context.getString(R.string.tuesday)
+            4 -> binding.root.context.getString(R.string.wednesday)
+            5 -> binding.root.context.getString(R.string.thursday)
+            6 -> binding.root.context.getString(R.string.friday)
+            7 -> binding.root.context.getString(R.string.saturday)
             else -> "-"
         }
         binding.nameDayText.text = dayOfWeekName

@@ -1,10 +1,18 @@
 package com.example.firstapp.activity
 
+import android.Manifest
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.graphics.Color
+import android.location.Geocoder
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import com.example.firstapp.R
 import com.example.firstapp.adapter.WeatherPagerAdapter
@@ -12,14 +20,39 @@ import com.example.firstapp.databinding.ActivityMainBinding
 import com.example.firstapp.model.CityResponseApi
 import com.example.firstapp.shared.PrefManager
 import com.example.firstapp.shared.SharedData
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.Priority
+import com.google.android.gms.tasks.CancellationTokenSource
+import java.util.Locale
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val prefManager by lazy { PrefManager(this) }
     private var adapter: WeatherPagerAdapter? = null
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    
+    private val locationPermissionRequest = registerForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissions ->
+        when {
+            permissions[Manifest.permission.ACCESS_FINE_LOCATION] == true ||
+            permissions[Manifest.permission.ACCESS_COARSE_LOCATION] == true -> {
+                getCurrentLocation()
+            }
+            else -> {
+                Toast.makeText(this, getString(R.string.location_permission_required), Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        
+        // Apply saved language before setting content view
+        val savedLanguage = prefManager.getLanguage()
+        setLocale(savedLanguage)
+        
         binding = ActivityMainBinding.inflate(layoutInflater)
         enableEdgeToEdge()
         setContentView(binding.root)
@@ -27,8 +60,14 @@ class MainActivity : AppCompatActivity() {
         window.apply {
             statusBarColor = Color.TRANSPARENT
         }
+        
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
         setupViewPager()
+
+        binding.gpsButton.setOnClickListener {
+            checkLocationPermissionAndGetLocation()
+        }
 
         binding.addCityButton.setOnClickListener {
             startActivity(Intent(this, AddCityActivity::class.java))
@@ -98,5 +137,96 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         setupViewPager()
+    }
+    
+    private fun checkLocationPermissionAndGetLocation() {
+        when {
+            ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED -> {
+                getCurrentLocation()
+            }
+            else -> {
+                locationPermissionRequest.launch(
+                    arrayOf(
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.ACCESS_COARSE_LOCATION
+                    )
+                )
+            }
+        }
+    }
+    
+    private fun getCurrentLocation() {
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED &&
+            ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            return
+        }
+        
+        Toast.makeText(this, getString(R.string.getting_location), Toast.LENGTH_SHORT).show()
+        
+        fusedLocationClient.getCurrentLocation(
+            Priority.PRIORITY_HIGH_ACCURACY,
+            CancellationTokenSource().token
+        ).addOnSuccessListener { location ->
+            if (location != null) {
+                val lat = location.latitude
+                val lon = location.longitude
+                
+                // Reverse geocoding để lấy tên thành phố
+                try {
+                    val geocoder = Geocoder(this, Locale.getDefault())
+                    val addresses = geocoder.getFromLocation(lat, lon, 1)
+                    
+                    val cityName = addresses?.firstOrNull()?.let { address ->
+                        address.locality ?: address.subAdminArea ?: address.adminArea ?: getString(R.string.current_location)
+                    } ?: getString(R.string.current_location)
+                    
+                    // Cập nhật SharedData để WeatherFragment hiển thị
+                    SharedData.sharedLatitude = lat
+                    SharedData.sharedLongitude = lon
+                    SharedData.sharedCity = cityName
+                    SharedData.isTemporarySearch = true
+                    
+                    Toast.makeText(this, getString(R.string.got_location, cityName), Toast.LENGTH_SHORT).show()
+                    
+                    // Refresh ViewPager để hiển thị thành phố vừa detect
+                    setupViewPager()
+                    
+                } catch (e: Exception) {
+                    Toast.makeText(this, getString(R.string.geocoder_error, e.message), Toast.LENGTH_SHORT).show()
+                    
+                    // Vẫn hiển thị thời tiết dù không có tên thành phố
+                    SharedData.sharedLatitude = lat
+                    SharedData.sharedLongitude = lon
+                    SharedData.sharedCity = "Lat: $lat, Lon: $lon"
+                    SharedData.isTemporarySearch = true
+                    setupViewPager()
+                }
+            } else {
+                Toast.makeText(this, getString(R.string.location_failed), Toast.LENGTH_LONG).show()
+            }
+        }.addOnFailureListener { e ->
+            Toast.makeText(this, getString(R.string.gps_error, e.message), Toast.LENGTH_SHORT).show()
+        }
+    }
+    
+    private fun setLocale(languageCode: String) {
+        val locale = Locale(languageCode)
+        Locale.setDefault(locale)
+        
+        val config = Configuration(resources.configuration)
+        config.setLocale(locale)
+        
+        createConfigurationContext(config)
+        resources.updateConfiguration(config, resources.displayMetrics)
     }
 }

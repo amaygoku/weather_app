@@ -1,7 +1,6 @@
 package com.example.firstapp.fragment
 
 import android.graphics.Color
-import android.icu.util.Calendar
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -29,7 +28,6 @@ class WeatherFragment : Fragment() {
     private var _binding: FragmentWeatherBinding? = null
     private val binding get() = _binding!!
     private val weatherViewModel: WeatherViewModel by viewModels()
-    private val calendar by lazy { Calendar.getInstance() }
     private val forecastAdapter by lazy { ForecastAdapter() }
 
     private var lat: Double = 0.0
@@ -168,10 +166,6 @@ class WeatherFragment : Fragment() {
         binding.tempChart.invalidate()
     }
 
-    private fun isNightNow(): Boolean {
-        return calendar.get(Calendar.HOUR_OF_DAY) >= 18
-    }
-
     private fun setDynamicallyWallpaper(icon: String): Int {
         return when (icon.dropLast(1)) {
             "01" -> R.drawable.sunny_bg
@@ -184,21 +178,32 @@ class WeatherFragment : Fragment() {
     }
 
     private fun updateWeatherUI(data: CurrentResponseApi) {
+        val icon = data.weather?.get(0)?.icon ?: "-"
+        // Dựa vào icon để biết trời đang sáng hay tối tại chính thành phố đó
+        val isNight = icon.endsWith("n")
+
         binding.cityText.text = cityName
         binding.detailLayout.visibility = View.VISIBLE
         binding.statusText.text = data.weather?.get(0)?.main ?: "-"
-        binding.windText.text = (data.wind?.speed?.let { Math.round(it).toString() } ?: "0") + " " + getString(R.string.wind_speed_unit)
+        
+        // Kiểm tra xem string resource có tồn tại không để tránh crash, nếu chưa có bạn hãy thêm vào strings.xml
+        val windUnit = try { getString(R.string.wind_speed_unit) } catch (e: Exception) { "Km" }
+        binding.windText.text = (data.wind?.speed?.let { Math.round(it).toString() } ?: "0") + " " + windUnit
+        
         binding.humidityText.text = (data.main?.humidity?.toString() ?: "-") + "%"
         binding.currentTempText.text = (data.main?.temp?.let { Math.round(it).toString() } ?: "-") + "°"
         
         val maxTemp = data.main?.tempMax?.let { Math.round(it).toString() } ?: "0"
         val minTemp = data.main?.tempMin?.let { Math.round(it).toString() } ?: "0"
-        binding.tempRangeText.text = "${getString(R.string.highest_temp_short)}:$maxTemp°  ${getString(R.string.lowest_temp_short)}:$minTemp°"
+        
+        val highText = try { getString(R.string.highest_temp_short) } catch (e: Exception) { "H" }
+        val lowText = try { getString(R.string.lowest_temp_short) } catch (e: Exception) { "L" }
+        binding.tempRangeText.text = "$highText:$maxTemp°  $lowText:$minTemp°"
 
-        val drawable = if (isNightNow()) {
+        val drawable = if (isNight) {
             R.drawable.night_bg
         } else {
-            setDynamicallyWallpaper(data.weather?.get(0)?.icon ?: "-")
+            setDynamicallyWallpaper(icon)
         }
         Glide.with(this).load(drawable).into(binding.backgroundImage)
     }

@@ -46,6 +46,10 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Khởi tạo Activity khi màn hình được tạo
+     * Áp dụng ngôn ngữ đã lưu, thiết lập giao diện và các listener
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         
@@ -84,6 +88,10 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Thiết lập ViewPager để hiển thị danh sách các thành phố
+     * Bao gồm: thành phố mặc định (Hà Nội), thành phố tìm kiếm tạm thời và thành phố yêu thích
+     */
     private fun setupViewPager() {
         val finalCities = mutableListOf<CityResponseApi.CityResponseItem>()
         
@@ -126,8 +134,18 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    // Hàm kiểm tra trùng lặp dựa trên tọa độ (chính xác hơn so với tên)
+    /**
+     * Kiểm tra hai thành phố có cùng vị trí địa lý hay không
+     * So sánh dựa trên tọa độ (latitude, longitude) với sai số cho phép 0.01
+     * @param city1 Thành phố thứ nhất
+     * @param city2 Thành phố thứ hai
+     * @return true nếu hai thành phố cùng vị trí, false nếu khác
+     */
     private fun isSameLocation(city1: CityResponseApi.CityResponseItem, city2: CityResponseApi.CityResponseItem): Boolean {
+    /**
+     * Được gọi khi Activity quay lại foreground
+     * Cập nhật lại ViewPager để hiển thị các thay đổi mới (thêm/xóa thành phố)
+     */
         val threshold = 0.01 // Sai số nhỏ chấp nhận được
         val latDiff = Math.abs((city1.lat ?: 0.0) - (city2.lat ?: 0.0))
         val lonDiff = Math.abs((city1.lon ?: 0.0) - (city2.lon ?: 0.0))
@@ -135,6 +153,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onResume() {
+    /**
+     * Kiểm tra quyền truy cập vị trí của ứng dụng
+     * Nếu đã có quyền: lấy vị trí hiện tại
+     * Nếu chưa có: yêu cầu người dùng cấp quyền
+     */
         super.onResume()
         setupViewPager()
     }
@@ -153,6 +176,11 @@ class MainActivity : AppCompatActivity() {
                         Manifest.permission.ACCESS_FINE_LOCATION,
                         Manifest.permission.ACCESS_COARSE_LOCATION
                     )
+    /**
+     * Lấy vị trí GPS hiện tại của thiết bị
+     * Sử dụng Geocoder để chuyển đổi tọa độ thành tên thành phố
+     * Cập nhật SharedData và làm mới ViewPager để hiển thị thành phố hiện tại
+     */
                 )
             }
         }
@@ -209,6 +237,10 @@ class MainActivity : AppCompatActivity() {
                     SharedData.sharedLongitude = lon
                     SharedData.sharedCity = "Lat: $lat, Lon: $lon"
                     SharedData.isTemporarySearch = true
+    /**
+     * Thay đổi ngôn ngữ hiển thị của ứng dụng
+     * @param languageCode Mã ngôn ngữ ("vi" cho Tiếng Việt, "en" cho English)
+     */
                     setupViewPager()
                 }
             } else {

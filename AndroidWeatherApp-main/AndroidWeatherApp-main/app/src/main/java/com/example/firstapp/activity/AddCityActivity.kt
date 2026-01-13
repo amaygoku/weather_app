@@ -24,6 +24,10 @@ class AddCityActivity : AppCompatActivity() {
     private val cityViewModel: CityViewModel by viewModels()
     private val prefManager by lazy { PrefManager(this) }
 
+    /**
+     * Khởi tạo Activity thêm thành phố
+     * Thiết lập RecyclerView, xử lý sự kiện tìm kiếm và hiển thị lịch sử
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAddCityBinding.inflate(layoutInflater)
@@ -67,6 +71,10 @@ class AddCityActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Hiển thị lịch sử tìm kiếm các thành phố đã tìm trước đó
+     * Lấy dữ liệu từ SharedPreferences và hiển thị lên RecyclerView
+     */
     private fun showSearchHistory() {
         val history = prefManager.getHistory()
         if (history.isNotEmpty()) {
@@ -75,6 +83,10 @@ class AddCityActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Thiết lập các Observer để lắng nghe dữ liệu từ ViewModel
+     * Cập nhật RecyclerView khi có kết quả tìm kiếm hoặc lỗi xảy ra
+     */
     private fun setupObservers() {
         cityViewModel.cities.observe(this, Observer { data ->
             binding.progressBar2.visibility = View.GONE

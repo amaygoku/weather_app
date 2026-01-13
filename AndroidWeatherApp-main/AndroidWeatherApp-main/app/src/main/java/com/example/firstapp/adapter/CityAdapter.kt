@@ -13,11 +13,23 @@ import com.example.firstapp.shared.SharedData
 
 class CityAdapter : RecyclerView.Adapter<CityAdapter.ViewHolder>() {
 
+    /**
+     * Tạo ViewHolder mới cho mỗi item trong RecyclerView
+     * @param parent ViewGroup chứa ViewHolder
+     * @param viewType Loại view
+     * @return ViewHolder đã được tạo
+     */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = CityViewholderBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
     }
 
+    /**
+     * Gắn dữ liệu thành phố vào ViewHolder
+     * Xử lý sự kiện click vào thành phố và nút yêu thích
+     * @param holder ViewHolder cần bind dữ liệu
+     * @param position Vị trí của item trong danh sách
+     */
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val city = differ.currentList[position]
         val prefManager = PrefManager(holder.binding.root.context)
@@ -48,6 +60,11 @@ class CityAdapter : RecyclerView.Adapter<CityAdapter.ViewHolder>() {
         }
     }
 
+    /**
+     * Cập nhật icon ngôi sao yêu thích
+     * @param holder ViewHolder chứa icon
+     * @param isFav true nếu thành phố đã được yêu thích, false nếu chưa
+     */
     private fun updateFavoriteIcon(holder: ViewHolder, isFav: Boolean) {
         if (isFav) {
             holder.binding.favBtn.setImageResource(android.R.drawable.btn_star_big_on)
@@ -56,6 +73,10 @@ class CityAdapter : RecyclerView.Adapter<CityAdapter.ViewHolder>() {
         }
     }
 
+    /**
+     * Lấy số lượng item trong RecyclerView
+     * @return Số lượng thành phố trong danh sách
+     */
     override fun getItemCount() = differ.currentList.size
 
     inner class ViewHolder(val binding: CityViewholderBinding) : RecyclerView.ViewHolder(binding.root)

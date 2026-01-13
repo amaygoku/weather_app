@@ -27,6 +27,12 @@ class CityViewModel(private val repository: CityRepository) : ViewModel() {
     private val apiKey = "dbf63f777a1a59d0c0cf2f858e2b5e4c"
     private var searchJob: Job? = null
 
+    /**
+     * Tìm kiếm danh sách thành phố theo tên
+     * Sử dụng debounce (delay 500ms) để tránh gọi API quá nhiều
+     * @param q Tên thành phố cần tìm
+     * @param limit Số lượng kết quả tối đa
+     */
     fun loadCities(q: String, limit: Int) {
         searchJob?.cancel()
         searchJob = viewModelScope.launch {

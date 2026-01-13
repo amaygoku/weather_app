@@ -17,6 +17,12 @@ class ForecastAdapter : RecyclerView.Adapter<ForecastAdapter.ViewHolder>() {
     private lateinit var binding: ForecastViewholderBinding
 
 
+    /**
+     * Tạo ViewHolder mới cho mỗi item dự báo thời tiết
+     * @param parent ViewGroup chứa ViewHolder
+     * @param viewType Loại view
+     * @return ViewHolder đã được tạo
+     */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         binding = ForecastViewholderBinding.inflate(inflater, parent, false)
@@ -24,8 +30,18 @@ class ForecastAdapter : RecyclerView.Adapter<ForecastAdapter.ViewHolder>() {
     }
     inner class ViewHolder:RecyclerView.ViewHolder(binding.root)
 
+    /**
+     * Lấy số lượng item dự báo trong RecyclerView
+     * @return Số lượng dự báo thời tiết
+     */
     override fun getItemCount() = differ.currentList.size
 
+    /**
+     * Gắn dữ liệu dự báo thời tiết vào ViewHolder
+     * Hiển thị thông tin: ngày, giờ, nhiệt độ, icon thời tiết
+     * @param holder ViewHolder cần bind dữ liệu
+     * @param position Vị trí của item trong danh sách
+     */
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val binding = ForecastViewholderBinding.bind(holder.itemView)
         val date = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(differ.currentList[position].dtTxt.toString())

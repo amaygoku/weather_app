@@ -35,6 +35,13 @@ class WeatherFragment : Fragment() {
     private var cityName: String = ""
 
     companion object {
+        /**
+         * Tạo instance mới của WeatherFragment với thông tin thành phố
+         * @param lat Vĩ độ thành phố
+         * @param lon Kinh độ thành phố
+         * @param cityName Tên thành phố
+         * @return WeatherFragment đã được khởi tạo
+         */
         fun newInstance(lat: Double, lon: Double, cityName: String): WeatherFragment {
             val fragment = WeatherFragment()
             val args = Bundle()
@@ -46,6 +53,9 @@ class WeatherFragment : Fragment() {
         }
     }
 
+    /**
+     * Khởi tạo Fragment và lấy các tham số đã truyền từ Bundle
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -55,11 +65,19 @@ class WeatherFragment : Fragment() {
         }
     }
 
+    /**
+     * Tạo view cho Fragment
+     * @return View root của Fragment
+     */
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentWeatherBinding.inflate(inflater, container, false)
         return binding.root
     }
 
+    /**
+     * Gọi sau khi view đã được tạo
+     * Thiết lập RecyclerView, Observers, Blur effect và tải dữ liệu thời tiết
+     */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -92,6 +110,10 @@ class WeatherFragment : Fragment() {
         }
     }
 
+    /**
+     * Tải tất cả dữ liệu thời tiết cho thành phố
+     * Bao gồm: thời tiết hiện tại, dự báo và chất lượng không khí
+     */
     private fun loadWeatherData() {
         val unit = SharedData.sharedUnit
         weatherViewModel.loadCurrentWeather(lat, lon, unit)
@@ -99,6 +121,10 @@ class WeatherFragment : Fragment() {
         weatherViewModel.loadAirPollution(lat, lon)
     }
 
+    /**
+     * Thiết lập các Observer để lắng nghe dữ liệu từ ViewModel
+     * Cập nhật UI khi có dữ liệu mới
+     */
     private fun setupObservers() {
         weatherViewModel.currentWeather.observe(viewLifecycleOwner, Observer { data ->
             updateWeatherUI(data)
@@ -114,6 +140,10 @@ class WeatherFragment : Fragment() {
         })
     }
 
+    /**
+     * Cập nhật hiển thị chỉ số chất lượng không khí (AQI)
+     * @param data Dữ liệu AQI từ API
+     */
     private fun updateAirUI(data: AirPollutionResponseApi) {
         val aqi = data.list?.get(0)?.main?.aqi ?: 0
         val aqiText = when (aqi) {
@@ -127,6 +157,10 @@ class WeatherFragment : Fragment() {
         binding.aqiText.text = aqiText
     }
 
+    /**
+     * Thiết lập cấu hình cho biểu đồ nhiệt độ
+     * Ẩn các thành phần không cần thiết
+     */
     private fun setupChart() {
         binding.tempChart.apply {
             description.isEnabled = false
@@ -141,6 +175,11 @@ class WeatherFragment : Fragment() {
         }
     }
 
+    /**
+     * Cập nhật biểu đồ nhiệt độ theo dữ liệu dự báo
+     * Hiển thị nhiệt độ của 8 giờ tiếp theo
+     * @param data Dữ liệu dự báo thời tiết
+     */
     private fun updateChart(data: ForecastResponseApi) {
         val entries = ArrayList<Entry>()
         data.list?.take(8)?.forEachIndexed { index, forecast ->
@@ -166,6 +205,11 @@ class WeatherFragment : Fragment() {
         binding.tempChart.invalidate()
     }
 
+    /**
+     * Chọn hình nền phù hợp với tình trạng thời tiết
+     * @param icon Mã icon thời tiết từ API
+     * @return Resource ID của hình nền
+     */
     private fun setDynamicallyWallpaper(icon: String): Int {
         return when (icon.dropLast(1)) {
             "01" -> R.drawable.sunny_bg
@@ -177,6 +221,11 @@ class WeatherFragment : Fragment() {
         }
     }
 
+    /**
+     * Cập nhật giao diện hiển thị thông tin thời tiết hiện tại
+     * Bao gồm: tên thành phố, nhiệt độ, độ ẩm, tốc độ gió, hình nền
+     * @param data Dữ liệu thời tiết hiện tại
+     */
     private fun updateWeatherUI(data: CurrentResponseApi) {
         val icon = data.weather?.get(0)?.icon ?: "-"
         // Dựa vào icon để biết trời đang sáng hay tối tại chính thành phố đó
@@ -208,11 +257,19 @@ class WeatherFragment : Fragment() {
         Glide.with(this).load(drawable).into(binding.backgroundImage)
     }
 
+    /**
+     * Cập nhật RecyclerView hiển thị danh sách dự báo thời tiết
+     * @param data Dữ liệu dự báo thời tiết
+     */
     private fun updateForecastWeatherUI(data: ForecastResponseApi) {
         binding.blurView.visibility = View.VISIBLE
         forecastAdapter.differ.submitList(data.list)
     }
 
+    /**
+     * Hủy view khi Fragment bị destroy
+     * Giải phóng binding để tránh memory leak
+     */
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

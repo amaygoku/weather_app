@@ -14,6 +14,12 @@ class ApiClient {
         .writeTimeout(60, TimeUnit.SECONDS)
         .build()
 
+    /**
+     * Tạo và cấu hình Retrofit client để gọi API
+     * Base URL: https://api.openweathermap.org
+     * Timeout: 60 giây cho mỗi loại kết nối
+     * @return Retrofit instance đã được cấu hình
+     */
     fun getClient():Retrofit{
         retrofit = Retrofit.Builder()
             .baseUrl("https://api.openweathermap.org")

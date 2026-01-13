@@ -30,6 +30,12 @@ class WeatherViewModel(private val repository: WeatherRepository) : ViewModel() 
 
     private val apiKey = "dbf63f777a1a59d0c0cf2f858e2b5e4c"
 
+    /**
+     * Tải dữ liệu thời tiết hiện tại từ API
+     * @param lat Vĩ độ của thành phố
+     * @param lon Kinh độ của thành phố
+     * @param unit Đơn vị nhiệt độ ("metric" cho °C, "imperial" cho °F)
+     */
     fun loadCurrentWeather(lat: Double, lon: Double, unit: String) {
         viewModelScope.launch {
             try {
@@ -45,6 +51,12 @@ class WeatherViewModel(private val repository: WeatherRepository) : ViewModel() 
         }
     }
 
+    /**
+     * Tải dữ liệu dự báo thời tiết 5 ngày từ API
+     * @param lat Vĩ độ của thành phố
+     * @param lon Kinh độ của thành phố
+     * @param unit Đơn vị nhiệt độ ("metric" cho °C, "imperial" cho °F)
+     */
     fun loadForecastWeather(lat: Double, lon: Double, unit: String) {
         viewModelScope.launch {
             try {
@@ -60,6 +72,11 @@ class WeatherViewModel(private val repository: WeatherRepository) : ViewModel() 
         }
     }
 
+    /**
+     * Tải dữ liệu chất lượng không khí (AQI) từ API
+     * @param lat Vĩ độ của thành phố
+     * @param lon Kinh độ của thành phố
+     */
     fun loadAirPollution(lat: Double, lon: Double) {
         viewModelScope.launch {
             try {

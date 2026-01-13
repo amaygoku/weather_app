@@ -17,6 +17,10 @@ import java.util.Locale
 class SettingActivity : AppCompatActivity() {
     private val prefManager by lazy { PrefManager(this) }
 
+    /**
+     * Khởi tạo Activity cài đặt
+     * Thiết lập các Switch cho nhiệt độ và ngôn ngữ, xử lý sự kiện nút
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         
@@ -79,6 +83,10 @@ class SettingActivity : AppCompatActivity() {
         }
     }
     
+    /**
+     * Thay đổi ngôn ngữ hiển thị của ứng dụng
+     * @param languageCode Mã ngôn ngữ ("vi" hoặc "en")
+     */
     private fun setLocale(languageCode: String) {
         val locale = Locale(languageCode)
         Locale.setDefault(locale)
@@ -90,6 +98,11 @@ class SettingActivity : AppCompatActivity() {
         resources.updateConfiguration(config, resources.displayMetrics)
     }
     
+    /**
+     * Cập nhật text hiển thị ngôn ngữ hiện tại
+     * @param indicator TextView hiển thị ngôn ngữ
+     * @param languageCode Mã ngôn ngữ hiện tại
+     */
     private fun updateLanguageIndicator(indicator: TextView, languageCode: String) {
         indicator.text = if (languageCode == "en") {
             "🇬🇧 English"

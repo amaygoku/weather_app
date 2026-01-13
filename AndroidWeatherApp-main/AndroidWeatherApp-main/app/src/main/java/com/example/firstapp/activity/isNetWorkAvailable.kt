@@ -5,6 +5,12 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
 
+/**
+ * Kiểm tra kết nối mạng của thiết bị
+ * Hỗ trợ cả Android M trở lên và các phiên bản cũ hơn
+ * @param context Context của ứng dụng
+ * @return true nếu có kết nối mạng (WiFi hoặc Cellular), false nếu không có
+ */
 fun isNetworkAvailable(context: Context): Boolean {
     val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
